@@ -8,16 +8,16 @@ setup(
     # Versions should comply with PEP440.  For a discussion on single-sourcing
     # the version across setup.py and the project code, see
     # https://packaging.python.org/en/latest/single_source_version.html
-    version='2.0.0',
+    version='v2.0.2',
 
-    description='A simple python package for dealing with  zip codes in python.',
+    description='A simple python package for dealing with zip codes in Python',
 
     # The project's main homepage.
-    url='https://github.com/buckmaxwell/zipcode',
+    url='https://github.com/ConsumerAffairs/zipcode',
 
     # Author details
-    author='Max Buck',
-    author_email='maxbuckdeveloper@gmail.com',
+    author='ConsumerAffairs.com',
+    author_email='dev@consumeraffairs.com',
 
     # Choose your license
     license='MIT',
@@ -46,6 +46,7 @@ setup(
         'Programming Language :: Python :: 3.2',
         'Programming Language :: Python :: 3.3',
         'Programming Language :: Python :: 3.4',
+        'Programming Language :: Python :: 3.5',
     ],
 
     # What does your project relate to?
@@ -64,9 +65,9 @@ setup(
     # If there are data files included in your packages that need to be
     # installed, specify them here.  If using Python 2.6 or less, then these
     # have to be included in MANIFEST.in as well.
-    #package_data={
-    #    'zipcode': ['zipcode.db'],
-    #},
+    # package_data={
+    #     'zipcode': ['zipcode.db'],
+    # },
     include_package_data=True
 
 )
