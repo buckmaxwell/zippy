@@ -17,7 +17,6 @@ setup(
 
     # Author details
     author='ConsumerAffairs.com',
-    author_email='dev@consumeraffairs.com',
 
     # Choose your license
     license='MIT',
