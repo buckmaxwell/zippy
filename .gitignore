@@ -1,2 +1,3 @@
 dist
 zipcode.egg-info
+*.pyc
