@@ -91,7 +91,7 @@ class Zip(object):
         """A boolean value that reveals if a zipcode is still in use"""
         self.tax_returns_filed = zip_tuple[_TAX_RETURNS_FILED]
         """
-        Number of tax returns filed for the zip code in 8
+        Number of tax returns filed for the zip code in 2008
         according to the IRS
         """
         self.population = zip_tuple[_ESTIMATED_POPULATION]
