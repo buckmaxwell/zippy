@@ -6,7 +6,7 @@ import math
 __author__ = 'ConsumerAffairs.com'
 __license__ = 'MIT'
 __package__ = 'zipcode'
-__version__ = '2.0.3'
+__version__ = '2.0.4'
 
 _db_filename = 'zipcode.db'
 _directory = os.path.dirname(os.path.abspath(__file__))
@@ -91,7 +91,7 @@ class Zip(object):
         """A boolean value that reveals if a zipcode is still in use"""
         self.tax_returns_filed = zip_tuple[_TAX_RETURNS_FILED]
         """
-        Number of tax returns filed for the zip code in 2008
+        Number of tax returns filed for the zip code in 8
         according to the IRS
         """
         self.population = zip_tuple[_ESTIMATED_POPULATION]
