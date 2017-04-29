@@ -6,7 +6,7 @@ import math
 __author__ = 'ConsumerAffairs.com'
 __license__ = 'MIT'
 __package__ = 'zipcode'
-__version__ = '2.0.3'
+__version__ = '2.0.4'
 
 _db_filename = 'zipcode.db'
 _directory = os.path.dirname(os.path.abspath(__file__))
