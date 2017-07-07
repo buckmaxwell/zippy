@@ -153,6 +153,22 @@ def isinradius(point, distance):
 			zips_in_radius.append(Zip(row))
 	return zips_in_radius
 
+def list_of_zipcodes():
+	_cur.execute('select * from ZIPS')
+
+	zipcode_list = []
+	all = _cur.fetchall()
+	for i in all:
+		zipcode_list.append(i[0])
+	return zipcode_list
+
+def return_all_data():
+	_cur.execute('select * from ZIPS')
+	all = _cur.fetchall()
+
+	return all
+
+
 
 
 
