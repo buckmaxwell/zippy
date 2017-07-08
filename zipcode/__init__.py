@@ -6,7 +6,7 @@ import math
 __author__ = 'ConsumerAffairs.com'
 __license__ = 'MIT'
 __package__ = 'zipcode'
-__version__ = '2.0.4'
+__version__ = '2.0.5'
 
 _db_filename = 'zipcode.db'
 _directory = os.path.dirname(os.path.abspath(__file__))
@@ -150,6 +150,20 @@ def isequal(zipcode):
     row = _cur.fetchone()
     if row:
         return Zip(row)
+    else:
+        return None
+
+
+def from_city_state(city, state):
+    """
+    Takes a city and state pair and returns the matching zipcodes list.
+    If it does not exist, None is returned.
+    """
+    _cur.execute('SELECT * FROM ZIPS WHERE CITY == ? AND STATE == ?',
+                [str(city).upper(), str(state).upper()])
+    rows = _cur.fetchall()
+    if rows:
+        return [Zip(row) for row in rows] 
     else:
         return None
 

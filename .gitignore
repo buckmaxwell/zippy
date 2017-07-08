@@ -1,3 +1,4 @@
 dist
 zipcode.egg-info
 *.pyc
+*.swp
