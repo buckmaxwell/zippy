@@ -154,6 +154,20 @@ def isequal(zipcode):
         return None
 
 
+def from_city_state(city, state):
+    """
+    Takes a city and state pair and returns the matching zipcodes list.
+    If it does not exist, None is returned.
+    """
+    _cur.execute('SELECT * FROM ZIPS WHERE CITY == ? AND STATE == ?',
+                [str(city).upper(), str(state).upper()])
+    rows = _cur.fetchall()
+    if rows:
+        return [Zip(row) for row in rows] 
+    else:
+        return None
+
+
 def isinradius(point, distance):
     """
     Takes a tuple of (lat, lon) where lon and lat are floats, and a distance in
