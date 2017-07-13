@@ -7,14 +7,16 @@ __version__ = '2.0.0'
 
 import sqlite3 as db
 import os
-from haversine import haversine
 import math
+import re
+
+from haversine import haversine
 
 _db_filename = 'zipcode.db'
 _directory = os.path.dirname(os.path.abspath(__file__))
 _zipcodedb_location = os.path.join(_directory, _db_filename)
 _conn = db.connect(_zipcodedb_location, check_same_thread=False)
-
+_digits = re.compile('[^\d\-]')
 
 _cur = _conn.cursor()
 
@@ -50,7 +52,7 @@ class Zip(object):
 		"""The primary city associated with the zip code according to USPS"""
 		self.state = zip_tuple[_STATE]
 		"""The state associated with the zip code according to USPS"""
-		self._location_type = zip_tuple[_LOCATION_TYPE] 
+		self._location_type = zip_tuple[_LOCATION_TYPE]
 		# This value will always be 'Primary'. Secondary and 'Not Acceptable' placenames have been removed.
 		self.lat = zip_tuple[_LAT]
 		"""The latitude associated with the zipcode according to the National Weather Service.  This can be empty when there is no NWS Data"""
@@ -97,20 +99,28 @@ def _make_zip_list(list_of_zip_tuples):
 
 
 def _validate(zipcode):
-	if not isinstance(zipcode, str):
+	if not isinstance(zipcode, str) or len(zipcode) == 0:
 		raise TypeError('zipcode should be a string')
-	int(zipcode) # This could throw an error if zip is not made of numbers
-	return True
+	if _contains_nondigits(zipcode) or not zipcode[0].isdigit() or not zipcode[-1].isdigit():
+            raise TypeError('zipcode may contain only digits and "-".')
+        # More details on "ZIP+4" codes: https://smartystreets.com/articles/zip-4-code
+	if '-' in zipcode and zipcode.count('-') == 1: # zipcode of the form '06469-1145'
+            zipcode = zipcode.split('-', 1)[0]         # keep '06469', discard '-1145'
+
+	return zipcode
+
+def _contains_nondigits(s):
+    return bool(_digits.search(s))
 
 def islike(zipcode):
 	"""Takes a partial zip code and returns a list of zipcode objects with matching prefixes."""
-	_validate(zipcode)
+	zipcode = _validate(zipcode)
 	_cur.execute('SELECT * FROM ZIPS WHERE ZIP_CODE LIKE ?', ['{zipcode}%'.format(zipcode=str(zipcode))])
 	return _make_zip_list(_cur.fetchall())
 
 def isequal(zipcode):
 	"""Takes a zipcode and returns the matching zipcode object.  If it does not exist, None is returned"""
-	_validate(zipcode)
+	zipcode = _validate(zipcode)
 	_cur.execute('SELECT * FROM ZIPS WHERE ZIP_CODE == ?', [str(zipcode)])
 	row = _cur.fetchone()
 	if row:
@@ -120,8 +130,8 @@ def isequal(zipcode):
 
 def isinradius(point, distance):
 	"""Takes a tuple of (lat, lon) where lon and lat are floats, and a distance in miles. Returns a list of zipcodes near the point."""
-	zips_in_radius = list()
-	
+	zips_in_radius = []
+
 	if not isinstance(point, tuple):
 		raise TypeError('point should be a tuple of floats')
 	for f in point:
@@ -151,23 +161,5 @@ def isinradius(point, distance):
 	for row in results:
 		if haversine(point, (row[_LAT], row[_LONG])) <= distance:
 			zips_in_radius.append(Zip(row))
+
 	return zips_in_radius
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
