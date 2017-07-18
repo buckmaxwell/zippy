@@ -6,15 +6,18 @@ import math
 __author__ = 'ConsumerAffairs.com'
 __license__ = 'MIT'
 __package__ = 'zipcode'
-__version__ = '2.0.5'
+__version__ = '2.0.6'
 
-_db_filename = 'zipcode.db'
+_db_filename = 'zipcode.sql'
 _directory = os.path.dirname(os.path.abspath(__file__))
 _zipcodedb_location = os.path.join(_directory, _db_filename)
-_conn = db.connect(_zipcodedb_location, check_same_thread=False)
 
-
+_conn = db.connect(':memory:', check_same_thread=False)
 _cur = _conn.cursor()
+with open(_zipcodedb_location) as _db_file:
+    _cur.executescript(_db_file.read())
+    _conn.commit()
+    _conn.row_factory = db.Row
 
 # positions
 _ZIP_CODE = 0
