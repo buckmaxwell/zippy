@@ -127,8 +127,9 @@ def _make_zip_list(list_of_zip_tuples):
 def _validate(zipcode):
     if not isinstance(zipcode, str):
         raise TypeError('zipcode should be a string')
+    zipcode = str(zipcode).split('-')[0]
     int(zipcode)  # This could throw an error if zip is not made of numbers
-    return True
+    return zipcode
 
 
 def islike(zipcode):
@@ -136,7 +137,7 @@ def islike(zipcode):
     Takes a partial zip code and returns a list of zipcode
     objects with matching prefixes.
     """
-    _validate(zipcode)
+    zipcode = _validate(zipcode)
     _cur.execute(
         'SELECT * FROM ZIPS WHERE ZIP_CODE LIKE ?',
         ['{zipcode}%'.format(zipcode=str(zipcode))])
@@ -148,7 +149,7 @@ def isequal(zipcode):
     Takes a zipcode and returns the matching zipcode object.
     If it does not exist, None is returned
     """
-    _validate(zipcode)
+    zipcode = _validate(zipcode)
     _cur.execute('SELECT * FROM ZIPS WHERE ZIP_CODE == ?', [str(zipcode)])
     row = _cur.fetchone()
     if row:
@@ -162,11 +163,12 @@ def from_city_state(city, state):
     Takes a city and state pair and returns the matching zipcodes list.
     If it does not exist, None is returned.
     """
-    _cur.execute('SELECT * FROM ZIPS WHERE CITY == ? AND STATE == ?',
-                [str(city).upper(), str(state).upper()])
+    _cur.execute(
+        'SELECT * FROM ZIPS WHERE CITY == ? AND STATE == ?',
+        [str(city).upper(), str(state).upper()])
     rows = _cur.fetchall()
     if rows:
-        return [Zip(row) for row in rows] 
+        return [Zip(row) for row in rows]
     else:
         return None
 
@@ -186,8 +188,8 @@ def isinradius(point, distance):
 
     dist_btwn_lat_deg = 69.172
     dist_btwn_lon_deg = math.cos(point[0]) * 69.172
-    lat_degr_rad = float(distance)/dist_btwn_lat_deg
-    lon_degr_rad = float(distance)/dist_btwn_lon_deg
+    lat_degr_rad = float(distance) / dist_btwn_lat_deg
+    lon_degr_rad = float(distance) / dist_btwn_lon_deg
 
     latmin = point[0] - lat_degr_rad
     latmax = point[0] + lat_degr_rad
